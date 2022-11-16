@@ -1,21 +1,18 @@
-const idKanap = new URLSearchParams.get("id")
+const productId = new URLSearchParams.get("id")
 
-const imgKanap = document.querySelector("item__img");
-const nameKanap = document.getElementById("title");
-const priceKanap = document.getElementById("price");
-const txtKanap = document.getElementById("description");
+const img = document.querySelector("item__img");
+const title = document.getElementById("title");
+const price = document.getElementById("price");
+const description = document.getElementById("description");
 
-/*function displayKanap(imgProduct){
-    imgKanap.innerHTML += 
-    `<img src="${imgProduct.imageUrl}" alt="${imgProduct.altTxt}">`;
-} */
+function displayProduct(kanap){
+    `title.innerHTML = kanap.name`;
+}
 
-fetch("http://localhost:3000/api/products + idKanap")
-    .then((response) => response.json())
-    .then(function displayKanap(imgProduct){
-        imgKanap.innerHTML += 
-        `<img src="${imgProduct.imageUrl}" alt="${imgProduct.altTxt}">`;
-    })
+
+fetch("http://localhost:3000/api/products + productId")
+    .then(response => response.json())
+
     .catch(function(error){
       alert("Toutes nos excuses, le canapé n'est pas disponible")
     });

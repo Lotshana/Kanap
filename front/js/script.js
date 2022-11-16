@@ -12,7 +12,7 @@ function displayItem(kanap){
 }
 
 fetch("http://localhost:3000/api/products")
-    .then((response) => response.json())
+    .then(response => response.json())
     .then(function(products){
       for(let product of products){
         displayItem(product);
