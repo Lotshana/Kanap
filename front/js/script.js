@@ -1,15 +1,23 @@
-let itemsContainer = document.getElementById("items");
+const itemContainer = document.getElementById("items");
 
-function displayItem(item){
-    itemsContainer.innerHTML += 
-    `<a href="./product.html?id=${item._id}">
+function displayItem(kanap){
+    itemContainer.innerHTML += 
+    `<a href="./product.html?id=${kanap._id}">
     <article>
-      <img src=".../product01.jpg" alt="Lorem ipsum dolor sit amet, Kanap name1">
-      <h3 class="productName">Kanap name1</h3>
-      <p class="productDescription">Dis enim malesuada risus sapien gravida nulla nisl arcu. Dis enim malesuada risus sapien gravida nulla nisl arcu.</p>
+      <img src="${kanap.imageUrl}" alt="${kanap.altTxt}">
+      <h3 class="productName">${kanap.name}</h3>
+      <p class="productDescription">${kanap.description}</p>
     </article>
     </a>`;
 }
 
 fetch("http://localhost:3000/api/products")
     .then((response) => response.json())
+    .then(function(products){
+      for(let product of products){
+        displayItem(product);
+      }
+    })
+    .catch(function(error){
+      alert("Il n'y a pas de capané disponible")
+    });
