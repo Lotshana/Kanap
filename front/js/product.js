@@ -8,13 +8,14 @@ const description = document.getElementById("description");
 const colors = document.getElementById("colors");
 
 
-fetch("http://localhost:3000/api/products + idProduct")
+fetch("http://localhost:3000/api/products/" + idProduct)
     .then(response => response.json())
     .then(function(item) {
       title.innerHTML = `${item.name}`
       img.innerHTML = `<img src="${item.imageUrl}" alt="${item.altTxt}">`
       price.innerHTML = `${item.price}`
       description.innerHTML = `${item.description}`
+      
       for(let color of item.colors){
         colors.innerHTML+=
         `<option value="${color}">${color}</option>`
