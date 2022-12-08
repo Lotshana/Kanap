@@ -11,6 +11,7 @@ const colors = document.getElementById("colors");
 fetch("http://localhost:3000/api/products/" + idProduct)
     .then(response => response.json())
     .then(function(item) {
+      console.log(item)
       title.innerHTML = `${item.name}`
       img.innerHTML = `<img src="${item.imageUrl}" alt="${item.altTxt}">`
       price.innerHTML = `${item.price}`
@@ -29,39 +30,38 @@ fetch("http://localhost:3000/api/products/" + idProduct)
 
     
 
-    const addLocalStorage = function(panier){
-      localStorage.setItem('panier', JSON.stringify(panier));
-    }
-
-    const ajoutPanier = () => {
+    const ajoutPanier = () => {      
       let quantity = parseInt(document.getElementById('quantity').value);
-      let color = colorsOption.options[colorsOption.selectedIndex].value;    
+      let color = colors.options[colors.selectedIndex].value;    
 
       let newBuy = {
         "_id" : idProduct,
         "quantity" : quantity,
         "color" : color,
       }
-      
+
       let panier = localStorage.getItem('panier') ? JSON.parse(localStorage.getItem('panier')) : [];
 
-      let productExistIndex = false;
+      let existIndex = false;
+
       for (let i = 0; i < panier.length; i++) {
         let productPanel = panier[i];
 
-        if (productPanel._id === productExistIndex._id) {
-          productExistIndex = i;
+        if (productPanel._id === newBuy._id && productPanel.color === newBuy.color) {
+          existIndex = i;
         }
       }
 
-      if (false !== productExistIndex) {
-        panier[productExistIndex].quantity = parseInt(panier[productExistIndex].quantity) + productExistIndex.quantity;
+      if (existIndex !== false) {
+        panier[existIndex].quantity += newBuy.quantity;
       } else {
-        panier.push(produit);
+        panier.push(newBuy);
       }
 
-      addLocalStorage(panier);
+
+
+      localStorage.setItem('panier', JSON.stringify(panier));  
       window.location.replace("/front/html/cart.html");
     }
 
-    document.getElementById('addToCart').addEventListener('click', function () {ajoutPanier(Kanap)})
+    document.getElementById('addToCart').addEventListener('click', function () {ajoutPanier()})
