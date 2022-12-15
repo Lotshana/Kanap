@@ -40,7 +40,7 @@ fetch("http://localhost:3000/api/products/" + idProduct)
         "color" : color,
       }
 
-      let panier = localStorage.getItem('panier') ? JSON.parse(localStorage.getItem('panier')) : [];
+      let panier = localStorage.getItem('panierStorage') ? JSON.parse(localStorage.getItem('panierStorage')) : [];
 
       let existIndex = false;
 
@@ -60,7 +60,7 @@ fetch("http://localhost:3000/api/products/" + idProduct)
 
 
 
-      localStorage.setItem('panier', JSON.stringify(panier));  
+      localStorage.setItem('panierStorage', JSON.stringify(panier));  
       window.location.replace("/front/html/cart.html");
     }
 
