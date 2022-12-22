@@ -1,7 +1,3 @@
-// 1. Récupération du
-
-
-
 /* Initialisation du panier à 0 */
 let priceCart = 0;
 
