@@ -1,16 +1,16 @@
-/* Initialisation du panier à 0 */
-let priceCart = 0;
-
 /* Récupération du produit via l'api */
 function getProduct(Currentid){
     return Promise.resolve(
         fetch("http://localhost:3000/api/products/" + Currentid)
-        .then(responve => Response.json())
+        .then(response => response.json())
         .then(function (product){
             return product
         })
     )
 }
+
+/* Initialisation du panier à 0 */
+let priceCart = 0;
 
 /* Calcul du prix total avec envoi au local storage */
 function totalPriceCart(price, quantity){
@@ -20,13 +20,13 @@ function totalPriceCart(price, quantity){
 }
 
 /* Récupération du panier */
-let panier = JSON.parse(localStorage.getItem("panier")) ? JSON.parse(localStorage.getIteam("panier")) : [];
+let panier = localStorage.getItem("panierStorage") ? JSON.parse(localStorage.getItem("panierStorage")) : [];
 
 let itemsCart = document.getElementById("cart__items");
 
 /* Boucle pour le panier */
-panier.forEach((kanap, i) =>{
-    getProduct(kanap._id).then(apiKanap =>{
+panier.forEach((kanap, i) => {
+    getProduct(kanap._id).then(apiKanap => {
         itemsCart.innerHTML += `
             <article class="cart__item" data-id="${kanap._id}" data-color="${kanap.color}">
             <div class="cart__item__img">
@@ -45,23 +45,31 @@ panier.forEach((kanap, i) =>{
                         <p>Total : ${apiKanap.price * kanap.quantity} €</p>
                     </div>
                     <div class="cart__item__content__settings__delete">
-                        <p class="deleteItem">Supprimer</p>
+                        <p class="deleteItem" onclick="deleteKanap(${i})">Supprimer</p>
                     </div>
                 </div>
             </div>
-            </article>`
+            </article>`;
+
+            /* Appel de la fonction pour le prix total */
+            totalPriceCart(apiKanap.price, kanap.quantity);
     })
 })
 
-/* Appel de la fonction */
-totalPriceCart(apiKanap.price, kanap.quantity);
-
 /* Incrémation de l'id du produit */
-addIdCart.push(kanap._id);
-
-
+// addIdCart.push(kanap._id);
 
 
 /* Evenement clique sur tous les boutons de suppression */
+const deleteKanap = (index) => {
+    panier.splice(index, 1);
+    localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage */
+    location.reload();
+}
 
 /* Evenement changement sur tous les input quantité */
+const modifKanap = (index, qte) => {
+    /* Modifier la quantité sur la position index de la variable panier avant de la mettre à jour */
+    localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage */
+    location.reload();
+}
