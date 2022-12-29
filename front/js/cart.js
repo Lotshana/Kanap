@@ -68,8 +68,17 @@ const deleteKanap = (index) => {
 }
 
 /* Evenement changement sur tous les input quantité */
-const modifKanap = (index, qte) => {
-    /* Modifier la quantité sur la position index de la variable panier avant de la mettre à jour */
-    localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage */
+const editKanap = document.querySelector('.itemQuantity');
+
+editKanap.addEventListener('changer', () => {
+    alert(i);
+    // const result = document.querySelector(${kanap.quantity});
+})
+
+/* const modifKanap = (index, qte) => {
+    >> Modifier la quantité sur la position index de la variable panier avant de la mettre à jour
+    addEventListener('change', );
+
+    localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage
     location.reload();
-}
+}*/
