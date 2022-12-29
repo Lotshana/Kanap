@@ -53,6 +53,15 @@ panier.forEach((kanap, i) => {
 
             /* Appel de la fonction pour le prix total */
             totalPriceCart(apiKanap.price, kanap.quantity);
+
+            /* Evenement changement sur tous les input quantité */
+            const listEditQte = document.querySelectorAll('.itemQuantity');
+                
+            listEditQte.forEach((inputQte, j) => {
+                inputQte.addEventListener('change', () => {
+                    updateQte(inputQte.value, j)
+                })
+            })
     })
 })
 
@@ -67,13 +76,19 @@ const deleteKanap = (index) => {
     location.reload();
 }
 
-/* Evenement changement sur tous les input quantité */
+const updateQte = (Qte, index) => {
+    panier[index].quantity = Qte;
+    localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage */
+    location.reload();
+}
+
+/* Evenement changement sur tous les input quantité 
 const editKanap = document.querySelector('.itemQuantity');
 
-editKanap.addEventListener('changer', () => {
+editKanap.addEventListener('change', () => {
     alert(i);
-    // const result = document.querySelector(${kanap.quantity});
-})
+    const result = document.querySelector(${kanap.quantity});
+})*/
 
 /* const modifKanap = (index, qte) => {
     >> Modifier la quantité sur la position index de la variable panier avant de la mettre à jour
