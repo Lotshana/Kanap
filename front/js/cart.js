@@ -65,10 +65,6 @@ panier.forEach((kanap, i) => {
     })
 })
 
-/* Incrémation de l'id du produit */
-// addIdCart.push(kanap._id);
-
-
 /* Evenement clique sur tous les boutons de suppression */
 const deleteKanap = (index) => {
     panier.splice(index, 1);
@@ -82,18 +78,40 @@ const updateQte = (Qte, index) => {
     location.reload();
 }
 
-/* Evenement changement sur tous les input quantité 
-const editKanap = document.querySelector('.itemQuantity');
+/* Vérification du formulaire */
+function validateEmail(emailId) {
+    let mailFormat = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    if(emailId.value.match(mailFormat)) {
+        document.forms.text.focus();
+        return true;
+    }
+    else {
+        alert("Votre adresse email est invalide.");
+        document.forms.text.focus();
+        return false;
+    }
+}
 
-editKanap.addEventListener('change', () => {
-    alert(i);
-    const result = document.querySelector(${kanap.quantity});
-})*/
+/*const formSubmit = () => {
+    function validateEmail() {
+        let x = document.querySelector('cart__order__form').value;
+        if (x == "") {
+            alert("Vous devez remplir ce champ");
+            return false;
+        }
+    };
+}
 
-/* const modifKanap = (index, qte) => {
-    >> Modifier la quantité sur la position index de la variable panier avant de la mettre à jour
-    addEventListener('change', );
+const formSubmit = () => {
+    function validateForm() {
+        let firstName = document.forms["cartForm"]["firstName"].value;
+        if (firstName == "") {
+            alert("Vous devez remplir ce champ");
+            return false;
+        }
+    };
+}*/
 
-    localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage
-    location.reload();
+/*const formSubmit = () => {
+    alert('test');
 }*/
