@@ -79,10 +79,10 @@ const updateQte = (Qte, index) => {
 }
 
 /* Vérification du formulaire */
-function validateEmail(emailId) {
-    let mailFormat = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-    if(emailId.value.match(mailFormat)) {
-        document.forms.text.focus();
+function validateEmail(email) {
+    let mailFormat = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; /* Masque du format d'email*/
+    if(email.value.match(mailFormat)) {
+        document.forms1.text1.focus();
         return true;
     }
     else {
@@ -92,26 +92,70 @@ function validateEmail(emailId) {
     }
 }
 
-/*const formSubmit = () => {
-    function validateEmail() {
-        let x = document.querySelector('cart__order__form').value;
-        if (x == "") {
-            alert("Vous devez remplir ce champ");
-            return false;
-        }
-    };
+/* Envoi du formulaire */
+let btnCommander = document.getElementById('order');
+btnCommander.addEventListener('click', function(event) {
+    event.preventDefault();
+    //alert(document.querySelector("form").reportValidity());
+
+    envoiCommande();
+})
+
+const envoiCommande = () => {
+    //alert('Traitement du formulaire')
+
+    // Récupérer les données du formulaire
+    // Test de la validation des données
+
+    // Appeler l'API commande (objet contact et array de l'ID des produits)
+    // Après un retour positif, redirection vers la page confirmation et affichage de l'ID de la commande
+
+    if(document.querySelector("form").reportValidity()) {
+        const contact = {
+            'firstName' : document.getElementById("firstName").value,
+            'lastName' : document.getElementById("lastName").value,
+            'address' : document.getElementById("address").value,
+            'city' : document.getElementById("city").value,
+            'email' : document.getElementById("email").value
+        };
+
+        console.log(contact);
+
+        let products = []; /* Création du tableau de produits de la commande */
+        panier.forEach((kanap) => {
+            products.push(kanap._id)
+        })
+
+        console.log(products);
+
+        let formCommande = JSON.stringify({
+            contact,
+            products
+        });
+
+        fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'content-type': "application/json"
+            },
+            mode: "cors",
+            body: formCommande
+        })
+        .then(function (response) {
+            return response.json()
+        })
+        .then(function (rep) {
+            localStorage.setItem("contact", JSON.stringify(rep.contact));
+            localStorage.setItem("produits ", JSON.stringify(rep.products ));        
+            window.location.assign("confirmation.html?orderId=" + rep.orderId);
+        })
+
+        .catch(function (err) {
+            console.log("fetch Error");
+          });
+
+    }
+    else {
+        alert('Erreur')
+    }
 }
-
-const formSubmit = () => {
-    function validateForm() {
-        let firstName = document.forms["cartForm"]["firstName"].value;
-        if (firstName == "") {
-            alert("Vous devez remplir ce champ");
-            return false;
-        }
-    };
-}*/
-
-/*const formSubmit = () => {
-    alert('test');
-}*/
