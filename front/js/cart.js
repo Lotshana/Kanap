@@ -78,7 +78,63 @@ const updateQte = (Qte, index) => {
     location.reload();
 }
 
-/* Vérification du formulaire */
+/* Vérification du nom de famille */
+function validateLastName(lastName) {
+    let lastName = /^[a-zA-Z]+$/; /* Masque du format de texte*/
+    if(name.value.match(lastName)) {
+        document.forms1.text1.focus();
+        return true;
+    }
+    else {
+        alert("Votre nom est invalide.");
+        document.forms.text.focus();
+        return false;
+    }
+}
+
+/* Vérification du prénom */
+function validateFirstName(firstName) {
+    let firstName = /^[a-zA-Z]+$/; /* Masque du format de texte*/
+    if(name.value.match(firstName)) {
+        document.forms1.text1.focus();
+        return true;
+    }
+    else {
+        alert("Votre nom est invalide.");
+        document.forms.text.focus();
+        return false;
+    }
+}
+
+/* Vérification de l'adresse */
+function validateAddress(address) {
+    let address = /^[A-Za-z0-9\-]+$/; /* Masque du format de l'adresse*/
+    if(address.value.match(firstName)) {
+        document.forms1.text1.focus();
+        return true;
+    }
+    else {
+        alert("Votre nom est invalide.");
+        document.forms.text.focus();
+        return false;
+    }
+}
+
+/* Vérification de la ville */
+function validateCity(city) {
+    let city = /^[a-zA-Z\-]+$/; /* Masque du format de la ville*/
+    if(city.value.match(city)) {
+        document.forms1.text1.focus();
+        return true;
+    }
+    else {
+        alert("Votre nom est invalide.");
+        document.forms.text.focus();
+        return false;
+    }
+}
+
+/* Vérification de l'email */
 function validateEmail(email) {
     let mailFormat = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; /* Masque du format d'email*/
     if(email.value.match(mailFormat)) {
