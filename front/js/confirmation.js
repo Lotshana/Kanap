@@ -9,3 +9,5 @@
 const orderConfirmation = () => {
     let orderId = parseInt(document.getElementById('orderId').value);
 }
+
+/*fetch('http://localhost:3000/api/products/order*/

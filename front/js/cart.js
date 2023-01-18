@@ -78,140 +78,102 @@ const updateQte = (Qte, index) => {
     location.reload();
 }
 
-/* Vérification du nom de famille */
-function validateLastName(lastName) {
-    let lastName = /^[a-zA-Z]+$/; /* Masque du format de texte*/
-    if(name.value.match(lastName)) {
-        document.forms1.text1.focus();
+
+
+/* Création de la fonction pour la validation des champs */
+function validateInput(input, masque) {
+    if(input.value.match(masque)) {
         return true;
     }
     else {
-        alert("Votre nom est invalide.");
-        document.forms.text.focus();
         return false;
     }
 }
 
-/* Vérification du prénom */
-function validateFirstName(firstName) {
-    let firstName = /^[a-zA-Z]+$/; /* Masque du format de texte*/
-    if(name.value.match(firstName)) {
-        document.forms1.text1.focus();
-        return true;
-    }
-    else {
-        alert("Votre nom est invalide.");
-        document.forms.text.focus();
-        return false;
-    }
-}
-
-/* Vérification de l'adresse */
-function validateAddress(address) {
-    let address = /^[A-Za-z0-9\-]+$/; /* Masque du format de l'adresse*/
-    if(address.value.match(firstName)) {
-        document.forms1.text1.focus();
-        return true;
-    }
-    else {
-        alert("Votre nom est invalide.");
-        document.forms.text.focus();
-        return false;
-    }
-}
-
-/* Vérification de la ville */
-function validateCity(city) {
-    let city = /^[a-zA-Z\-]+$/; /* Masque du format de la ville*/
-    if(city.value.match(city)) {
-        document.forms1.text1.focus();
-        return true;
-    }
-    else {
-        alert("Votre nom est invalide.");
-        document.forms.text.focus();
-        return false;
-    }
-}
-
-/* Vérification de l'email */
-function validateEmail(email) {
-    let mailFormat = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/; /* Masque du format d'email*/
-    if(email.value.match(mailFormat)) {
-        document.forms1.text1.focus();
-        return true;
-    }
-    else {
-        alert("Votre adresse email est invalide.");
-        document.forms.text.focus();
-        return false;
-    }
-}
 
 /* Envoi du formulaire */
-let btnCommander = document.getElementById('order');
+const btnCommander = document.getElementById('order');
 btnCommander.addEventListener('click', function(event) {
     event.preventDefault();
-    //alert(document.querySelector("form").reportValidity());
+    
+    /* Initialisation des erreurs */
+    let isValidate = true;
+    firstNameErrorMsg.innerHTML="";
+    lastNameErrorMsg.innerHTML="";
+    addressErrorMsg.innerHTML="";
+    cityErrorMsg.innerHTML="";
+    emailErrorMsg.innerHTML="";
 
-    envoiCommande();
+    /*Test des validations des champs */
+    if(validateInput(document.getElementById("firstName"), /^[a-zA-Z]+$/) == false){
+        isValidate = false;
+        firstNameErrorMsg.innerHTML="Il y a une erreur sur le prénom";
+    }
+
+    if(validateInput(lastName, /^[a-zA-Z]+$/) == false){
+        isValidate = false;
+        lastNameErrorMsg.innerHTML="Il y a une erreur sur le nom";
+    }
+
+    if(validateInput(address, /^[A-Za-z0-9 \-]+$/) == false){
+        isValidate = false;
+        addressErrorMsg.innerHTML="Il y a une erreur sur l'adresse";
+    }
+
+    if(validateInput(city, /^[A-Za-z0-9 \-]+$/) == false){
+        isValidate = false;
+        cityErrorMsg.innerHTML="Il y a une erreur sur la ville";
+    }
+    
+    if(validateInput(email, /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/) == false){
+        isValidate = false;
+        emailErrorMsg.innerHTML="Il y a une erreur sur l'email";
+    }
+
+    if(isValidate){
+        envoiCommande();
+    }
 })
 
 const envoiCommande = () => {
-    //alert('Traitement du formulaire')
+    const contact = {
+        'firstName' : document.getElementById("firstName").value,
+        'lastName' : document.getElementById("lastName").value,
+        'address' : document.getElementById("address").value,
+        'city' : document.getElementById("city").value,
+        'email' : document.getElementById("email").value
+    };
 
-    // Récupérer les données du formulaire
-    // Test de la validation des données
+    console.log(contact);
+    let products = []; /* Création du tableau vide de produits de la commande */
+    panier.forEach((kanap) => {
+        products.push(kanap._id)
+    })
 
-    // Appeler l'API commande (objet contact et array de l'ID des produits)
-    // Après un retour positif, redirection vers la page confirmation et affichage de l'ID de la commande
+    console.log(products);
+    let formCommande = JSON.stringify({
+        contact,
+        products
+    });
 
-    if(document.querySelector("form").reportValidity()) {
-        const contact = {
-            'firstName' : document.getElementById("firstName").value,
-            'lastName' : document.getElementById("lastName").value,
-            'address' : document.getElementById("address").value,
-            'city' : document.getElementById("city").value,
-            'email' : document.getElementById("email").value
-        };
+    fetch('http://localhost:3000/api/products/order', {
+        method: 'POST',
+        headers: {
+            'content-type': "application/json"
+        },
+        mode: "cors",
+        body: formCommande
+    })
+    .then(function (response) {
+        return response.json()
+    })
+    .then(function (rep) {
+        // localStorage.setItem("contact", JSON.stringify(rep.contact));
+        // localStorage.setItem("produits ", JSON.stringify(rep.products));        
+        window.location.assign("confirmation.html?orderId=" + rep.orderId);
+    })
 
-        console.log(contact);
-
-        let products = []; /* Création du tableau de produits de la commande */
-        panier.forEach((kanap) => {
-            products.push(kanap._id)
-        })
-
-        console.log(products);
-
-        let formCommande = JSON.stringify({
-            contact,
-            products
-        });
-
-        fetch('http://localhost:3000/api/products/order', {
-            method: 'POST',
-            headers: {
-                'content-type': "application/json"
-            },
-            mode: "cors",
-            body: formCommande
-        })
-        .then(function (response) {
-            return response.json()
-        })
-        .then(function (rep) {
-            localStorage.setItem("contact", JSON.stringify(rep.contact));
-            localStorage.setItem("produits ", JSON.stringify(rep.products ));        
-            window.location.assign("confirmation.html?orderId=" + rep.orderId);
-        })
-
-        .catch(function (err) {
-            console.log("fetch Error");
-          });
-
-    }
-    else {
-        alert('Erreur')
-    }
+    .catch(function (err) {
+        console.log("fetch Error");
+      });
 }

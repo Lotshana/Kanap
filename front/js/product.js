@@ -11,7 +11,7 @@ const colors = document.getElementById("colors");
 fetch("http://localhost:3000/api/products/" + idProduct)
     .then(response => response.json())
     .then(function(item) {
-      console.log(item)
+      // console.log(item)
       title.innerHTML = `${item.name}`
       img.innerHTML = `<img src="${item.imageUrl}" alt="${item.altTxt}">`
       price.innerHTML = `${item.price}`
