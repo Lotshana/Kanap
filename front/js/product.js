@@ -1,6 +1,8 @@
+/* Création d'une constante pour l'URL d'un produit en particulier en fonction de son ID */
 const url = new URL(document.location.href);
 const idProduct = url.searchParams.get("id");
 
+/* Création des constantes pour la récupération des informations sur l'API */
 const title = document.getElementById("title");
 const img = document.getElementById("product__img");
 const price = document.getElementById("price");
@@ -11,7 +13,6 @@ const colors = document.getElementById("colors");
 fetch("http://localhost:3000/api/products/" + idProduct)
     .then(response => response.json())
     .then(function(item) {
-      // console.log(item)
       title.innerHTML = `${item.name}`
       img.innerHTML = `<img src="${item.imageUrl}" alt="${item.altTxt}">`
       price.innerHTML = `${item.price}`
