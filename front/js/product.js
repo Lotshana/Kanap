@@ -28,12 +28,23 @@ fetch("http://localhost:3000/api/products/" + idProduct)
       alert("Toutes nos excuses, le canapé n'est pas disponible")
     });
 
+    /*  */
+    const ajoutPanier = () => {     
+       
+      const quantity = parseInt(document.getElementById('quantity').value);
+      const color = colors.options[colors.selectedIndex].value;
 
-    
-
-    const ajoutPanier = () => {      
-      let quantity = parseInt(document.getElementById('quantity').value);
-      let color = colors.options[colors.selectedIndex].value;    
+      /* Check des erreurs sur la couleur, indiquer à l'utilisateur de choisir une couleur */
+      if(color == "") {
+        alert("Veuillez préciser une couleur pour le canapé")
+        return
+      }
+      
+      /* Check des erreurs sur la quantité, indiquer à l'utilisateur de choisir une quantité */
+      if(quantity <= 0 || quantity >= 100) {
+        alert("Veuillez indiquer une quantité entre 1 et 100")
+        return
+      }
 
       let newBuy = {
         "_id" : idProduct,

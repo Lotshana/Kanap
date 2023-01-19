@@ -1,4 +1,4 @@
-/* Récupération du produit via l'api */
+/* Récupération du produit via l'API */
 function getProduct(Currentid){
     return Promise.resolve(
         fetch("http://localhost:3000/api/products/" + Currentid)
@@ -9,13 +9,18 @@ function getProduct(Currentid){
     )
 }
 
-/* Initialisation du panier à 0 */
+/* Initialisation du nb d'articles et du panier à 0 */
+let totalQte = 0;
 let priceCart = 0;
 
-/* Calcul du prix total avec envoi au local storage */
+/* Calcul du nombre total d'articles + prix total avec envoi au local storage */
 function totalPriceCart(price, quantity){
+    totalQte += Number(quantity);
     priceCart += quantity * price;
+
     let totalPrice = document.getElementById('totalPrice').textContent = priceCart;
+    document.getElementById('totalQuantity').textContent = totalQte;
+
     localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
 }
 
@@ -25,57 +30,82 @@ let panier = localStorage.getItem("panierStorage") ? JSON.parse(localStorage.get
 let itemsCart = document.getElementById("cart__items");
 
 /* Boucle pour le panier */
-panier.forEach((kanap, i) => {
-    getProduct(kanap._id).then(apiKanap => {
-        itemsCart.innerHTML += `
-            <article class="cart__item" data-id="${kanap._id}" data-color="${kanap.color}">
-            <div class="cart__item__img">
-                <img src="${apiKanap.imageUrl}" alt="${apiKanap.altTxt}">
-            </div>
-            <div class="cart__item__content">
-                <div class="cart__item__content__description">
-                    <h2>${apiKanap.name}</h2>
-                    <p>Couleur : ${kanap.color}</p>
-                    <p>Prix : ${apiKanap.price} €</p>
-                </div>
-                <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                        <p>Qté : </p>
-                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${kanap.quantity}">
-                        <p>Total : ${apiKanap.price * kanap.quantity} €</p>
-                    </div>
-                    <div class="cart__item__content__settings__delete">
-                        <p class="deleteItem" onclick="deleteKanap(${i})">Supprimer</p>
-                    </div>
-                </div>
-            </div>
-            </article>`;
+displayCart = () => {
+    itemsCart.innerHTML = "";
 
-            /* Appel de la fonction pour le prix total */
-            totalPriceCart(apiKanap.price, kanap.quantity);
+    panier.forEach((kanap, i) => {
+        getProduct(kanap._id).then(apiKanap => {
+            itemsCart.innerHTML += `
+                <article class="cart__item" data-id="${kanap._id}" data-color="${kanap.color}">
+                <div class="cart__item__img">
+                    <img src="${apiKanap.imageUrl}" alt="${apiKanap.altTxt}">
+                </div>
+                <div class="cart__item__content">
+                    <div class="cart__item__content__description">
+                        <h2>${apiKanap.name}</h2>
+                        <p>Couleur : ${kanap.color}</p>
+                        <p>Prix : ${apiKanap.price} €</p>
+                    </div>
+                    <div class="cart__item__content__settings">
+                        <div class="cart__item__content__settings__quantity">
+                            <p>Qté : </p>
+                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${kanap.quantity}">
+                            <p>Total : ${apiKanap.price * kanap.quantity} €</p>
+                        </div>
+                        <div class="cart__item__content__settings__delete">
+                            <p class="deleteItem">Supprimer</p>
+                        </div>
+                    </div>
+                </div>
+                </article>`;
 
-            /* Evenement changement sur tous les input quantité */
-            const listEditQte = document.querySelectorAll('.itemQuantity');
-                
-            listEditQte.forEach((inputQte, j) => {
-                inputQte.addEventListener('change', () => {
-                    updateQte(inputQte.value, j)
-                })
-            })
+                /* Appel de la fonction pour le prix total */
+                totalPriceCart(apiKanap.price, kanap.quantity);
+
+                if((i+1) === panier.length) {
+                    /* Evenement changement sur tous les input quantité */
+                    const listEditQte = document.querySelectorAll('.itemQuantity');
+                        
+                    listEditQte.forEach((inputQte, j) => {
+                        inputQte.addEventListener('change', () => {
+                            updateQte(inputQte.value, j)
+                        })
+                    })
+
+                    /* Evenement suppression d'un article */
+                    const deleteItems = document.querySelectorAll('.deleteItem');
+    
+                    deleteItems.forEach((deleteBtn, j) => {
+                        deleteBtn.addEventListener('click', () => {
+                            if (confirm("Êtes vous sur de vouloir supprimer ce Kanap ?")) {
+                                deleteKanap(j)
+                            }
+                        })
+                    })
+                }
+        })
     })
-})
+}
+
+displayCart();
+
 
 /* Evenement clique sur tous les boutons de suppression */
 const deleteKanap = (index) => {
     panier.splice(index, 1);
     localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage */
-    location.reload();
+    totalQte = 0;
+    priceCart = 0;
+    displayCart();
 }
 
+/* Evenement clique sur tous les boutons de suppression */
 const updateQte = (Qte, index) => {
     panier[index].quantity = Qte;
     localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage */
-    location.reload();
+    totalQte = 0;
+    priceCart = 0;
+    displayCart();
 }
 
 
