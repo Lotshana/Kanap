@@ -1,6 +1,7 @@
 const itemContainer = document.getElementById("items");
 
 function displayItem(kanap){
+  try {
     itemContainer.innerHTML += 
     `<a href="./product.html?id=${kanap._id}">
     <article>
@@ -9,6 +10,10 @@ function displayItem(kanap){
       <p class="productDescription">${kanap.description}</p>
     </article>
     </a>`;
+  }
+  catch (e) {
+    console.log('Erreur d\'affichage sur le displayItem : ' + e)
+  }
 }
 
 fetch("http://localhost:3000/api/products")
@@ -20,4 +25,5 @@ fetch("http://localhost:3000/api/products")
     })
     .catch(function(error){
       alert("Il n'y a pas de capané disponible")
+      console.log('Erreur backend')
     });

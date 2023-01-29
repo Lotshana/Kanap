@@ -35,29 +35,34 @@ displayCart = () => {
 
     panier.forEach((kanap, i) => {
         getProduct(kanap._id).then(apiKanap => {
-            itemsCart.innerHTML += `
-                <article class="cart__item" data-id="${kanap._id}" data-color="${kanap.color}">
-                <div class="cart__item__img">
-                    <img src="${apiKanap.imageUrl}" alt="${apiKanap.altTxt}">
-                </div>
-                <div class="cart__item__content">
-                    <div class="cart__item__content__description">
-                        <h2>${apiKanap.name}</h2>
-                        <p>Couleur : ${kanap.color}</p>
-                        <p>Prix : ${apiKanap.price} €</p>
+            try{
+                itemsCart.innerHTML += `
+                    <article class="cart__item" data-id="${kanap._id}" data-color="${kanap.color}">
+                    <div class="cart__item__img">
+                        <img src="${apiKanap.imageUrl}" alt="${apiKanap.altTxt}">
                     </div>
-                    <div class="cart__item__content__settings">
-                        <div class="cart__item__content__settings__quantity">
-                            <p>Qté : </p>
-                            <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${kanap.quantity}">
-                            <p>Total : ${apiKanap.price * kanap.quantity} €</p>
+                    <div class="cart__item__content">
+                        <div class="cart__item__content__description">
+                            <h2>${apiKanap.name}</h2>
+                            <p>Couleur : ${kanap.color}</p>
+                            <p>Prix : ${apiKanap.price} €</p>
                         </div>
-                        <div class="cart__item__content__settings__delete">
-                            <p class="deleteItem">Supprimer</p>
+                        <div class="cart__item__content__settings">
+                            <div class="cart__item__content__settings__quantity">
+                                <p>Qté : </p>
+                                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${kanap.quantity}">
+                                <p>Total : ${apiKanap.price * kanap.quantity} €</p>
+                            </div>
+                            <div class="cart__item__content__settings__delete">
+                                <p class="deleteItem">Supprimer</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                </article>`;
+                    </article>`;
+            }
+            catch (e) {
+              console.log('Erreur d\'affichage sur le getProduct : ' + e)
+            }
 
                 /* Appel de la fonction pour le prix total */
                 totalPriceCart(apiKanap.price, kanap.quantity);
@@ -197,13 +202,11 @@ const envoiCommande = () => {
     .then(function (response) {
         return response.json()
     })
-    .then(function (rep) {
-        // localStorage.setItem("contact", JSON.stringify(rep.contact));
-        // localStorage.setItem("produits ", JSON.stringify(rep.products));        
+    .then(function (rep) {      
         window.location.assign("confirmation.html?orderId=" + rep.orderId);
     })
 
     .catch(function (err) {
-        console.log("fetch Error");
+        console.log("Fetch Error");
       });
 }
