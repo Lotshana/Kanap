@@ -20,8 +20,6 @@ function totalPriceCart(price, quantity){
 
     let totalPrice = document.getElementById('totalPrice').textContent = priceCart;
     document.getElementById('totalQuantity').textContent = totalQte;
-
-    localStorage.setItem('totalPrice', JSON.stringify(totalPrice));
 }
 
 /* Récupération du panier */
@@ -104,7 +102,7 @@ const deleteKanap = (index) => {
     displayCart();
 }
 
-/* Evenement clique sur tous les boutons de suppression */
+/* Evenement clique sur la modification de la quantité */
 const updateQte = (Qte, index) => {
     panier[index].quantity = Qte;
     localStorage.setItem("panierStorage", JSON.stringify(panier)); /* Mise à jour du localStorage */
@@ -204,6 +202,7 @@ const envoiCommande = () => {
     })
     .then(function (rep) {      
         window.location.assign("confirmation.html?orderId=" + rep.orderId);
+        localStorage.removeItem("panierStorage", JSON.stringify(panier));
     })
 
     .catch(function (err) {

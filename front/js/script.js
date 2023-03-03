@@ -1,5 +1,6 @@
 const itemContainer = document.getElementById("items");
 
+/* Apparition des canapés avec les bonnes informations via l'API */
 function displayItem(kanap){
   try {
     itemContainer.innerHTML += 
@@ -16,6 +17,7 @@ function displayItem(kanap){
   }
 }
 
+/* Connexion au backend via API */
 fetch("http://localhost:3000/api/products")
     .then(response => response.json())
     .then(function(products){

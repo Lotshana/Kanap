@@ -20,7 +20,7 @@ fetch("http://localhost:3000/api/products/" + idProduct)
         description.innerHTML = `${item.description}`
 
         for(let color of item.colors){
-          colors.innerHTML+=
+          colors.innerHTML +=
           `<option value="${color}">${color}</option>`
         }
       }
@@ -34,7 +34,6 @@ fetch("http://localhost:3000/api/products/" + idProduct)
       console.log('Erreur backend')
     });
 
-    /*  */
     const ajoutPanier = () => {     
        
       const quantity = parseInt(document.getElementById('quantity').value);
@@ -78,8 +77,7 @@ fetch("http://localhost:3000/api/products/" + idProduct)
 
 
 
-      localStorage.setItem('panierStorage', JSON.stringify(panier));  
-      window.location.replace("/front/html/cart.html");
+      localStorage.setItem('panierStorage', JSON.stringify(panier));
     }
 
-    document.getElementById('addToCart').addEventListener('click', function () {ajoutPanier()})
+    document.getElementById('addToCart').addEventListener('click', function () {ajoutPanier(alert("Votre kanap a bien été ajouté au panier"))})
